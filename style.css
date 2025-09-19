@@ -42,9 +42,9 @@ section {
   padding: 0;
 }
 
-
+/* 图片铺满背景 */
 .video-section img {
-  position: absolute; /* 绝对定位覆盖整个父容器 */
+  position: absolute;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
@@ -52,6 +52,7 @@ section {
   z-index: 0;
 }
 
+/* 半透明遮罩 */
 .video-overlay {
   position: absolute;
   top: 0; left: 0;
@@ -62,20 +63,28 @@ section {
   pointer-events: none;
 }
 
-
-
-.video-text {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  color: #09b1ff;
+/* hero 容器 */
+.hero {
+  background: transparent; /* 改为透明 */
   z-index: 2;
-  font-size: 4rem;
-  font-weight: bold;
-  text-align: center;
-  font-family: 'gothic', sans-serif;
-  text-shadow: none;
 }
+
+
+.hero-text h1 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2; /* 稍微拉开行高 */
+  font-size: 2rem;  /* 固定字体大小 */
+}
+
+.hero-text p {
+  margin: 0.2em 0 0 0;  /* 段落上方留点空隙 */
+  padding: 0;
+  line-height: 1.2;
+  font-size: 1.2rem;
+}
+
+
 
 
 /* ----------------- 导航栏 ----------------- */
@@ -133,9 +142,7 @@ body > section {
 }
 
 /* hero, works 背景 */
-.hero {
-  background: #ffffff; /* 纯白 */
-}
+
 
 .works {
   background: #f1f1f1; /* 纯白 */
@@ -188,16 +195,27 @@ section {
   z-index: 10;
 }
 
+/* 弹窗内容内嵌 B 站 iframe */
+/* 弹窗内容 */
 .modal-content {
   position: relative;
-  width: 80%;
-  max-width: 1200px;
+  width: 90%;
+  max-width: 1200px;  /* 最大宽度 */
+  padding-top: 56.25%; /* 高度按16:9比例计算 */
 }
 
-.modal-content video {
+.modal-content iframe,
+.modal-content video,
+.modal-content img {
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain; /* 保持比例 */
+  border: 0;
 }
+
+
 
 .close-btn {
   position: absolute;
@@ -280,37 +298,50 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.6); /* 半透明白色，像 intro 的叠层 */
-  opacity: 0; /* 默认隐藏 */
-  transition: opacity 0.5s ease;
-  z-index: 2;
-  pointer-events: none; /* 鼠标事件穿透 */
+  background: rgba(255, 255, 255, 0.4);
+  color: #030303;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 文字靠下 */
+  padding: 10px;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .work-card:hover .overlay {
-  opacity: 1; /* 悬停显示 */
+  opacity: 1;
 }
 
-.work-card:hover img {
-  transform: none; /* 不放大 */
+/* ▶ 和标题同一行 */
+.overlay-top {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* ▶和标题的间距 */
 }
 
-
-.work-card h3 {
-  text-align: center;
-  margin: 10px 0 0;
-  font-size: 1rem;
+.overlay-top h3 {
+  margin: 0;
+  font-size: 1.5rem;  /* 固定字体大小 */
 }
 
-.work-card:hover img {
-  transform: none;  /* 不放大 */
+.work-card .overlay .work-desc {
+  font-size: 12px;
+  line-height: 1.2;
+  margin-top: 5px;
 }
 
-
-.play-btn {
-  font-size: 2rem;
-  margin-bottom: 5px;
+.work-card .overlay .play-btn {
+  font-size: 20px;
 }
+
+.work-card .overlay .work-desc {
+  font-size: 1rem;  /* 固定字体大小 */
+  line-height: 1.2;
+  margin-top: 5px;
+  text-align: left; /* 左对齐 */
+}
+
 
 /* 弹窗 */
 .modal {
@@ -351,26 +382,33 @@ section {
 }
 
 #about {
-  height: 500px;       /* 高度自适应内容 */
-  padding: 0px 0px; /* 上下左右内边距，可调整 */
-  background: #f1f1f1;  /* 如果你想单独背景可以换颜色 */
+  height: auto;       /* 高度自适应内容 */
+  padding: 20px 20px 120px 20px; /* 上 20px，右 20px，下 80px，左 20px */
 }
+
 
 .about-container {
-  text-align: left;
-  max-width: 600px;     /* 宽度限制，阅读感更好 */
-  margin: 0;            /* 靠左 */
-  margin-left: 600px;
-  line-height: 1.6;     /* 行高，让文字不挤 */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;       /* 左右居中 */
 }
 
-.about-container h2 {
-  margin-bottom: 20px;  /* 标题和文字的距离 */
-  font-size: 2rem;      /* 大小可根据你整体比例调整 */
+
+.about-text {
+  text-align: left;        /* 左对齐文字 */
+  line-height: 1.6;
 }
 
-.about-container p {
-  margin: 5px 0;        /* 段落间距 */
-  font-size: 1.2rem;
+.about-avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
+.small-text {
+  margin: 2px 0;
+  line-height: 1.4;
+}
