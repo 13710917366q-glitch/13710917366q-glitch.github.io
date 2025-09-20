@@ -67,7 +67,7 @@ coverContainer.addEventListener('click', () => {
   showreelModal.style.display = 'flex';
 
   const bvid = 'BV19KpezdExJ'; // 你要播放的 B 站视频
-  const page = 1; // 指定页码
+  const page = 9; // 指定页码
   let iframe = document.getElementById('showreel-bilibili-iframe');
 
   if(!iframe){
