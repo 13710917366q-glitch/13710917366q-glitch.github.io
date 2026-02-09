@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
   // -------- Navigation smooth scroll --------
@@ -14,63 +13,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // -------- Disable drag --------
   document.querySelectorAll('img, video').forEach(el => {
-    el.setAttribute('draggable', false);
+    el.setAttribute('draggable', 'false');
   });
 
-  // -------- Showreel click to load video --------
+  // -------- Showreel: click to load bilibili iframe --------
   const showreel = document.querySelector('.showreel-video');
-
-  if(showreel){
+  if (showreel) {
     showreel.addEventListener('click', () => {
-
-      if(showreel.dataset.loaded) return;
+      if (showreel.dataset.loaded) return;
 
       const iframe = document.createElement('iframe');
-      iframe.src = "https://player.bilibili.com/player.html?bvid=BV1xx411c7mD&autoplay=1";
-      iframe.loading = "lazy";
+      // On some mobile browsers, autoplay inside iframe may be blocked.
+      // We still request autoplay, but allow attributes to maximize compatibility.
+      iframe.src = 'https://player.bilibili.com/player.html?bvid=BV1xx411c7mD&page=1&autoplay=1';
+      iframe.loading = 'lazy';
       iframe.allowFullscreen = true;
-      iframe.frameBorder = "0";
-      iframe.style.width = "100%";
-      iframe.style.height = "100%";
+      iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+      iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+      iframe.frameBorder = '0';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
 
       showreel.innerHTML = '';
       showreel.appendChild(iframe);
-
-      showreel.dataset.loaded = true;
+      showreel.dataset.loaded = 'true';
     });
   }
 
-
-  // -------- Project modal video lazy loading --------
+  // -------- Project modal video --------
   const modal = document.getElementById('videoModal');
   const modalContent = document.getElementById('modalContent');
 
-  document.querySelectorAll('.project-card').forEach(card => {
+  // Prevent taps inside the video area from closing the modal (mobile-friendly)
+  if (modalContent) {
+    modalContent.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+    modalContent.addEventListener('touchstart', (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+  }
+
+  document.querySelectorAll('.work-card, .project-card').forEach(card => {
     card.addEventListener('click', () => {
+      if (!modal || !modalContent) return;
 
       const bvid = card.dataset.bvid;
-      if(!bvid) return;
+      const page = card.dataset.page || '1';
+      if (!bvid) return;
 
       modal.style.display = 'block';
 
       const iframe = document.createElement('iframe');
-      iframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&autoplay=1`;
-      iframe.loading = "lazy";
+      // Mobile browsers often block autoplay; use autoplay=0 to avoid "endless loading" perception.
+      iframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&page=${page}&autoplay=0`;
+      iframe.loading = 'lazy';
       iframe.allowFullscreen = true;
-      iframe.frameBorder = "0";
-      iframe.style.width = "100%";
-      iframe.style.height = "100%";
+      iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+      iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+      iframe.frameBorder = '0';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
 
       modalContent.innerHTML = '';
       modalContent.appendChild(iframe);
     });
   });
 
-  // -------- Close modal --------
-  if(modal){
+  // Close modal when tapping outside the video
+  if (modal) {
     modal.addEventListener('click', () => {
       modal.style.display = 'none';
-      modalContent.innerHTML = '';
+      if (modalContent) modalContent.innerHTML = '';
     });
   }
 
