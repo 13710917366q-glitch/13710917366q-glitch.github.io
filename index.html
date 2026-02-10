@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Celeste Yao Portfolio</title>
-  <link rel="stylesheet" href="style.css?v=1.0.2">
+  <link rel="stylesheet" href="style.css?v=1.0.6">
   </head>
 <body>
   
@@ -289,6 +289,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const showreelClose = showreelModal.querySelector('.close-btn');
   const showreelContent = showreelModal.querySelector('.modal-content');
 
+  // Mobile-friendly: prevent taps inside the content from closing the modal
+  showreelContent.addEventListener('click', e => e.stopPropagation());
+  showreelContent.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
   coverContainer.addEventListener('click', () => {
     showreelModal.style.display = 'flex';
     let iframe = document.getElementById('showreel-bilibili-iframe');
@@ -297,11 +300,11 @@ document.addEventListener('DOMContentLoaded', () => {
       iframe.id='showreel-bilibili-iframe';
       iframe.width='100%'; iframe.height='100%';
       iframe.frameBorder='0';
-      iframe.allow='autoplay; fullscreen';
+      iframe.allow='autoplay; fullscreen; picture-in-picture';
       iframe.allowFullscreen=true;
       showreelContent.appendChild(iframe);
     }
-    iframe.src = `https://player.bilibili.com/player.html?bvid=BV19KpezdExJ&page=9&autoplay=true`;
+    iframe.src = `https://player.bilibili.com/player.html?bvid=BV19KpezdExJ&page=9&p=9&autoplay=1`;
   });
 
   const closeShowreelModal = () => {
@@ -318,6 +321,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalClose = modal.querySelector('.close-btn');
   const modalContent = modal.querySelector('.modal-content');
   let modalIframe = null;
+
+  // Mobile-friendly: prevent taps inside the content from closing the modal
+  modalContent.addEventListener('click', e => e.stopPropagation());
+  modalContent.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
   const modalImg = document.getElementById('modal-img');
 
   document.querySelectorAll('.work-card').forEach(card => {
@@ -331,13 +338,13 @@ document.addEventListener('DOMContentLoaded', () => {
           modalIframe.width='100%';
           modalIframe.height='100%';
           modalIframe.frameBorder='0';
-          modalIframe.allow='autoplay; fullscreen';
+          modalIframe.allow='autoplay; fullscreen; picture-in-picture';
           modalIframe.allowFullscreen=true;
           modalContent.appendChild(modalIframe);
         }
         const bvid = card.dataset.bvid;
         const page = card.dataset.page || 1;
-        modalIframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&page=${page}&autoplay=true`;
+        modalIframe.src = `https://player.bilibili.com/player.html?bvid=${bvid}&page=${page}&p=${page}&autoplay=1`;
         modalIframe.style.display='block';
       } else {
         if(modalIframe) modalIframe.style.display='none';
@@ -360,8 +367,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 </script>
-
-
-<script src="script_optimized.js?v=1.0.2"></script>
 </body>
 </html>
